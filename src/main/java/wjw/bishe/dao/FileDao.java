@@ -1,0 +1,23 @@
+package wjw.bishe.dao;
+
+import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
+import wjw.bishe.entity.Monthly;
+
+import java.util.Date;
+import java.util.List;
+
+@Mapper
+@Repository
+public interface FileDao {
+
+    void createMonthly(String id, String path, int number, Date date, int examineStatus, String examineContent);
+
+    List<Monthly> getMonthly(String id);
+
+    void updateMonthly(String id, int number, int examineStatus, String examineContent);
+
+    void addStudent(String uid, String name);
+
+    void addUser(String username);
+}

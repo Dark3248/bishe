@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="wjw.bishe.dao.FormDao">
+
+    <insert id="createInternship" parameterType="wjw.bishe.entity.Internship">
+        insert into internship (name, uid, phone_number, email, id_card, company_name, company_website,
+                               company_teacher_post, examine_content2, grade_path, path, contract_path,
+                               company_teacher, company_teacher_phone, project_info, tuition_path,
+                               insurance_start_date, examine_status1, resume_path, examine_status3,
+                               insurance_end_date, company_contact, internship_type, examine_status2,
+                               company_contact_phone, company_teacher_info, company_teacher_qualification,
+                               insurance_path, examine_content3, school_teacher, school_teacher_phone, insurance_type,
+                               examine_content1, liangfang_path)
+        values (#{name}, #{uid}, #{phoneNumber}, #{email}, #{idCard}, #{companyName}, #{companyWebsite},
+                #{companyTeacherPost}, #{examineContent2}, #{gradePath}, #{path}, #{contractPath}, #{companyTeacher},
+                #{companyTeacherPhone}, #{projectInfo}, #{tuitionPath}, #{insuranceStartDate}, #{examineStatus1},
+                #{resumePath}, #{examineStatus3}, #{insuranceEndDate}, #{companyContact}, #{internshipType},
+                #{examineStatus2}, #{companyContactPhone}, #{companyTeacherInfo}, #{companyTeacherQualification},
+                #{insurancePath}, #{examineContent3}, #{schoolTeacher}, #{schoolTeacherPhone}, #{insuranceType},
+                #{examineContent1}, #{liangfangPath})
+    </insert>
+
+    <select id="getInternship" resultType="wjw.bishe.entity.Internship">
+        select *
+        from internship
+        where uid = #{uid}
+    </select>
+
+    <insert id="createJob" parameterType="wjw.bishe.entity.Job">
+        insert into Job(uid, name, type, company, base, salary)
+        values (#{uid}, #{name}, #{type}, #{company}, #{base}, #{salary})
+    </insert>
+
+    <select id="getJob" resultType="wjw.bishe.entity.Job">
+        select *
+        from Job
+        where uid = #{uid}
+    </select>
+
+    <insert id="createGraduation" parameterType="wjw.bishe.entity.Graduation">
+        insert into graduation(uid, name, gender, birthday, politic, birth_place, major, study_year, graduate_time,
+                               phone_number, qq, email, company, department, company_email, title, company_time,
+                               company_contact, company_phone, salary, company_type, wish, college)
+        values (#{uid}, #{name}, #{gender}, #{birthday}, #{politic}, #{birthPlace}, #{major}, #{studyYear}, #{graduateTime},
+                #{phoneNumber}, #{qq}, #{email}, #{company}, #{department}, #{companyEmail}, #{title}, #{companyTime},
+                #{companyContact}, #{companyPhone}, #{salary}, #{companyType}, #{wish}, #{college})
+    </insert>
+
+    <select id="getGraduation" resultType="wjw.bishe.entity.Graduation">
+        select *
+        from graduation
+        where uid = #{uid}
+    </select>
+
+</mapper>

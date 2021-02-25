@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="wjw.bishe.dao.FileDao">
+    <insert id="createMonthly">
+        insert into monthly (uid, path, num, post_date, examine_status, examine_content)
+        values (#{id}, #{path}, #{number}, #{date}, #{examineStatus}, #{examineContent})
+    </insert>
+
+    <select id="getMonthly" resultType="wjw.bishe.entity.Monthly">
+        select path, post_date, examine_status, examine_content, num
+        from monthly
+        where uid = #{id}
+    </select>
+
+    <update id="updateMonthly">
+        update monthly
+        set examine_status = #{examineStatus}, examine_content = #{examineContent}
+        where uid = #{id} and num = #{number}
+    </update>
+
+    <insert id="addStudent">
+        insert into student (uid, name, status, book, paper)
+        values (#{uid}, #{name}, 1, 0, 0)
+    </insert>
+
+    <insert id="addUser">
+        insert into user(username, utype)
+        values(#{username}, 1)
+    </insert>
+
+</mapper>

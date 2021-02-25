@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: bishe
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/bishe?serverTimezone=UTC&useUnicode-true&characterEncoding-utf-8
+    username: root
+    password: root
+  web:
+    resources:
+      static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/,file:E://test/
+  servlet:
+    multipart:
+      max-file-size: 10MB
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: wjw.bishe.dao
+  configuration:
+    map-underscore-to-camel-case: true
+
+server:
+  port: 8081

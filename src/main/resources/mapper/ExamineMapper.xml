@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="wjw.bishe.dao.ExamineDao">
+    <select id="getGrade" resultType="wjw.bishe.entity.Internship">
+        select student.uid, grade_path, student.name
+        from internship, student
+        where internship.uid = student.uid and examine_status1 = 3 and student.teacher = #{uid}
+    </select>
+
+    <select id="getTuition" resultType="wjw.bishe.entity.Internship">
+        select uid, tuition_path, name
+        from internship
+        where examine_status2 = 3
+    </select>
+
+    <select id="getOther" resultType="wjw.bishe.entity.Internship">
+        select uid, name, resume_path, insurance_path, contract_path, liangfang_path
+        from internship
+        where examine_status3 = 3
+    </select>
+
+    <select id="getStu" resultType="String">
+        select uid
+        from monthly
+        where examine_status = 3
+        group by uid
+    </select>
+
+    <select id="getMonthly" resultType="wjw.bishe.entity.Monthly">
+        select num, path
+        from monthly
+        where uid = #{uid} and examine_status = 3
+    </select>
+
+    <update id="examine1" parameterType="wjw.bishe.request.ExamineRequest">
+        update internship
+        set examine_status1 = #{examineStatus}, examine_content1 = #{examineContent}
+        where uid = #{uid}
+    </update>
+
+    <update id="examine2" parameterType="wjw.bishe.request.ExamineRequest">
+        update internship
+        set examine_status2 = #{examineStatus}, examine_content2 = #{examineContent}
+        where uid = #{uid}
+    </update>
+
+    <update id="examine3" parameterType="wjw.bishe.request.ExamineRequest">
+        update internship
+        set examine_status3 = #{examineStatus}, examine_content3 = #{examineContent}
+        where uid = #{uid}
+    </update>
+
+    <update id="examineMonthly" parameterType="wjw.bishe.request.ExamineMonthlyRequest">
+        update monthly
+        set examine_status = #{examineStatus}, examine_content = #{examineContent}
+        where uid = #{uid} and num = #{num}
+    </update>
+</mapper>
