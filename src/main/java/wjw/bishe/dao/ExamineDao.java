@@ -12,6 +12,7 @@ import java.util.List;
 @Mapper
 @Repository
 public interface ExamineDao {
+    Internship getIntern(String uid);
 
     List<Internship> getGrade(String uid);
 

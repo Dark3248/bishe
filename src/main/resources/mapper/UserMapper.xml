@@ -4,6 +4,13 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="wjw.bishe.dao.UserDao">
+
+    <update id="changeStatus">
+        update student
+        set status = #{status}
+        where uid = #{uid}
+    </update>
+
     <select id="getByUsername" resultType="wjw.bishe.entity.User">
         select *
         from user
@@ -21,5 +28,11 @@
         select *
         from user
         where username = #{username} and password = #{password}
+    </select>
+
+    <select id="getAllStudent" resultType="wjw.bishe.entity.Student">
+        select *
+        from student
+        where status = 1
     </select>
 </mapper>

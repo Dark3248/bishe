@@ -5,6 +5,8 @@ import org.springframework.stereotype.Repository;
 import wjw.bishe.entity.Student;
 import wjw.bishe.entity.User;
 
+import java.util.List;
+
 @Repository
 @Mapper
 public interface UserDao {
@@ -14,4 +16,8 @@ public interface UserDao {
     Student getStudent(String uid);
 
     User getByUsernameAndPassword(String username, String password);
+
+    void changeStatus(String uid, int status);
+
+    List<Student> getAllStudent();
 }

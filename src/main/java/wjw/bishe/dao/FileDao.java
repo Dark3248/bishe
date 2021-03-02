@@ -3,6 +3,7 @@ package wjw.bishe.dao;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 import wjw.bishe.entity.Monthly;
+import wjw.bishe.entity.Student;
 
 import java.util.Date;
 import java.util.List;
@@ -17,7 +18,13 @@ public interface FileDao {
 
     void updateMonthly(String id, int number, int examineStatus, String examineContent);
 
-    void addStudent(String uid, String name);
+    void addStudent(String uid, String name, String teacher);
 
     void addUser(String username);
+
+    void changeBook(String uid);
+
+    void changePaper(String uid);
+
+    Student getStudent(String uid);
 }

@@ -55,4 +55,10 @@
         where uid = #{uid}
     </select>
 
+
+    <delete id="deleteById">
+        delete from internship
+        where uid = #{uid}
+    </delete>
+
 </mapper>

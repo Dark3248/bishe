@@ -20,4 +20,6 @@ public interface FormDao {
     void createGraduation(Graduation graduation);
 
     Graduation getGraduation(String uid);
+
+    void deleteById(String uid);
 }

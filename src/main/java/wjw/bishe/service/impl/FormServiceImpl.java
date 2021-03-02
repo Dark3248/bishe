@@ -20,12 +20,19 @@ public class FormServiceImpl implements FormService {
 
     @Override
     public void createInternship(Internship internship) {
-        internship.setExamineContent1("");
-        internship.setExamineContent2("");
-        internship.setExamineContent3("");
-        internship.setExamineStatus1(Constant.examine_unknown);
-        internship.setExamineStatus2(Constant.examine_unknown);
-        internship.setExamineStatus3(Constant.examine_unknown);
+        this.formDao.deleteById(internship.getUid());
+        if (internship.getExamineStatus1() != 1) {
+            internship.setExamineContent1("");
+            internship.setExamineStatus1(Constant.examine_unknown);
+        }
+        if (internship.getExamineStatus2() != 1) {
+            internship.setExamineContent2("");
+            internship.setExamineStatus2(Constant.examine_unknown);
+        }
+        if (internship.getExamineStatus3() != 1) {
+            internship.setExamineContent3("");
+            internship.setExamineStatus3(Constant.examine_unknown);
+        }
         formDao.createInternship(internship);
     }
 

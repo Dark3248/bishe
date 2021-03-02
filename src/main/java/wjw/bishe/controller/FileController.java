@@ -214,30 +214,91 @@ public class FileController {
     }
 
     @PostMapping("/excel")
-    public void excel(@RequestParam MultipartFile file,
-                      @RequestParam String type) throws IOException {
-        System.out.println(type);
-        Workbook workbook = new XSSFWorkbook(file.getInputStream());
-
-        if (type.equals("导入学生名单")) {
+    public int excel(@RequestParam MultipartFile file,
+                      @RequestParam String type) {
+        try {
+            Workbook workbook = new XSSFWorkbook(file.getInputStream());
             Sheet sheet = workbook.getSheetAt(0);
             int rowNumbers = sheet.getLastRowNum() + 1;
             Row temp = sheet.getRow(0);
             if (temp == null) {
-                return;
+                return Constant.code_fail;
             }
-            for (int row = 1; row < rowNumbers; row++) {
-                Row r = sheet.getRow(row);
-                r.getCell(0).setCellType(CellType.STRING);
-                String uid = r.getCell(0).getStringCellValue();
-                r.getCell(1).setCellType(CellType.STRING);
-                String name = r.getCell(1).getStringCellValue();
-                System.out.println(uid);
-                System.out.println(name);
-                this.fileService.addStudent(uid, name);
+            //学号 姓名
+            switch (type) {
+                case "导入学生名单":
+                    for (int row = 1; row < rowNumbers; row++) {
+                        Row r = sheet.getRow(row);
+                        r.getCell(0).setCellType(CellType.STRING);
+                        String uid = r.getCell(0).getStringCellValue();
+                        r.getCell(1).setCellType(CellType.STRING);
+                        String name = r.getCell(1).getStringCellValue();
+                        r.getCell(2).setCellType(CellType.STRING);
+                        String teacher = r.getCell(2).getStringCellValue();
+                        this.fileService.addStudent(uid, name, teacher);
+                    }
+                    break;
+                case "通过开题答辩名单":
+                    //学号 姓名 是否通过
+                    for (int row = 1; row < rowNumbers; row++) {
+                        Row r = sheet.getRow(row);
+                        r.getCell(0).setCellType(CellType.STRING);
+                        String uid = r.getCell(0).getStringCellValue();
+                        r.getCell(2).setCellType(CellType.STRING);
+                        String bool = r.getCell(2).getStringCellValue();
+                        if (bool.equals("是"))
+                            this.fileService.changeStatus(uid, 2);
+                    }
+                    break;
+                case "通过中期答辩名单":
+                    for (int row = 1; row < rowNumbers; row++) {
+                        Row r = sheet.getRow(row);
+                        r.getCell(0).setCellType(CellType.STRING);
+                        String uid = r.getCell(0).getStringCellValue();
+                        r.getCell(2).setCellType(CellType.STRING);
+                        String bool = r.getCell(2).getStringCellValue();
+                        if (bool.equals("是"))
+                            this.fileService.changeStatus(uid, 5);
+                    }
+                    break;
+                case "通过毕业答辩名单":
+                    for (int row = 1; row < rowNumbers; row++) {
+                        Row r = sheet.getRow(row);
+                        r.getCell(0).setCellType(CellType.STRING);
+                        String uid = r.getCell(0).getStringCellValue();
+                        r.getCell(2).setCellType(CellType.STRING);
+                        String bool = r.getCell(2).getStringCellValue();
+                        if (bool.equals("是"))
+                            this.fileService.changeStatus(uid, 6);
+                    }
+                    break;
+                case "图书归还名单":
+                    for (int row = 1; row < rowNumbers; row++) {
+                        Row r = sheet.getRow(row);
+                        r.getCell(0).setCellType(CellType.STRING);
+                        String uid = r.getCell(0).getStringCellValue();
+                        r.getCell(2).setCellType(CellType.STRING);
+                        String bool = r.getCell(2).getStringCellValue();
+                        if (bool.equals("是"))
+                            this.fileService.changeBook(uid);
+                    }
+                    break;
+                case "论文电子版提交名单":
+                    for (int row = 1; row < rowNumbers; row++) {
+                        Row r = sheet.getRow(row);
+                        r.getCell(0).setCellType(CellType.STRING);
+                        String uid = r.getCell(0).getStringCellValue();
+                        r.getCell(2).setCellType(CellType.STRING);
+                        String bool = r.getCell(2).getStringCellValue();
+                        if (bool.equals("是"))
+                            this.fileService.changePaper(uid);
+                    }
+                    break;
             }
+            workbook.close();
+        } catch (IOException e) {
+            return Constant.code_fail;
         }
-
-        workbook.close();
+        return Constant.code_success;
     }
 }

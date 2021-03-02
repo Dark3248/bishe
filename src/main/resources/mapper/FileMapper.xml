@@ -22,13 +22,31 @@
     </update>
 
     <insert id="addStudent">
-        insert into student (uid, name, status, book, paper)
-        values (#{uid}, #{name}, 1, 0, 0)
+        insert into student (uid, name, status, book, paper, teacher)
+        values (#{uid}, #{name}, 1, 0, 0, #{teacher})
     </insert>
 
     <insert id="addUser">
         insert into user(username, utype)
         values(#{username}, 1)
     </insert>
+
+    <update id="changeBook">
+        update student
+        set book = 1
+        where uid = #{uid}
+    </update>
+
+    <update id="changePaper">
+        update student
+        set paper = 1
+        where uid = #{uid}
+    </update>
+
+    <select id="getStudent" resultType="wjw.bishe.entity.Student">
+        select *
+        from student
+        where uid = #{uid}
+    </select>
 
 </mapper>
