@@ -5,10 +5,10 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/bishe?serverTimezone=UTC&useUnicode-true&characterEncoding-utf-8
     username: root
-    password: root
+    password: rootroot
   web:
     resources:
-      static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/,file:E://test/
+      static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/,file:/Users/root/test
   servlet:
     multipart:
       max-file-size: 10MB

@@ -84,7 +84,8 @@ public class ExamineServiceImpl implements ExamineService {
                 delete(resume);
                 delete(insurance);
                 delete(contract);
-                delete(liangfang);
+                if (liangfang.exists())
+                    delete(liangfang);
             }
             this.examineDao.examine3(request);
         }

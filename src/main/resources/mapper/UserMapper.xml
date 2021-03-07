@@ -8,7 +8,7 @@
     <update id="changeStatus">
         update student
         set status = #{status}
-        where uid = #{uid}
+        where uid = #{uid} and #{status} > status
     </update>
 
     <select id="getByUsername" resultType="wjw.bishe.entity.User">

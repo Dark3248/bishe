@@ -213,9 +213,28 @@ public class FileController {
         }
     }
 
+    private boolean check(int type, Sheet sheet) {
+        Row r = sheet.getRow(0);
+        r.getCell(0).setCellType(CellType.STRING);
+        String bool0 = r.getCell(0).getStringCellValue();
+        r.getCell(1).setCellType(CellType.STRING);
+        String bool1 = r.getCell(1).getStringCellValue();
+        r.getCell(2).setCellType(CellType.STRING);
+        String bool2 = r.getCell(2).getStringCellValue();
+        if (type == 1) {
+            return bool0.equals("学号") && bool1.equals("姓名") && bool2.equals("班主任");
+        } else if (type == 2) {
+            return bool0.equals("学号") && bool1.equals("姓名") && bool2.equals("是否通过");
+        } else if (type == 3) {
+            return bool0.equals("学号") && bool1.equals("姓名") && bool2.equals("是否提交");
+        } else {
+            return bool0.equals("学号") && bool1.equals("姓名") && bool2.equals("是否归还");
+        }
+    }
+
     @PostMapping("/excel")
     public int excel(@RequestParam MultipartFile file,
-                      @RequestParam String type) {
+                     @RequestParam String type) {
         try {
             Workbook workbook = new XSSFWorkbook(file.getInputStream());
             Sheet sheet = workbook.getSheetAt(0);
@@ -224,9 +243,11 @@ public class FileController {
             if (temp == null) {
                 return Constant.code_fail;
             }
-            //学号 姓名
             switch (type) {
                 case "导入学生名单":
+                    //学号 姓名 班主任
+                    if (!check(1, sheet))
+                        return Constant.code_fail;
                     for (int row = 1; row < rowNumbers; row++) {
                         Row r = sheet.getRow(row);
                         r.getCell(0).setCellType(CellType.STRING);
@@ -240,6 +261,8 @@ public class FileController {
                     break;
                 case "通过开题答辩名单":
                     //学号 姓名 是否通过
+                    if (!check(2, sheet))
+                        return Constant.code_fail;
                     for (int row = 1; row < rowNumbers; row++) {
                         Row r = sheet.getRow(row);
                         r.getCell(0).setCellType(CellType.STRING);
@@ -251,6 +274,8 @@ public class FileController {
                     }
                     break;
                 case "通过中期答辩名单":
+                    if (!check(2, sheet))
+                        return Constant.code_fail;
                     for (int row = 1; row < rowNumbers; row++) {
                         Row r = sheet.getRow(row);
                         r.getCell(0).setCellType(CellType.STRING);
@@ -262,6 +287,8 @@ public class FileController {
                     }
                     break;
                 case "通过毕业答辩名单":
+                    if (!check(2, sheet))
+                        return Constant.code_fail;
                     for (int row = 1; row < rowNumbers; row++) {
                         Row r = sheet.getRow(row);
                         r.getCell(0).setCellType(CellType.STRING);
@@ -273,6 +300,8 @@ public class FileController {
                     }
                     break;
                 case "图书归还名单":
+                    if (!check(4, sheet))
+                        return Constant.code_fail;
                     for (int row = 1; row < rowNumbers; row++) {
                         Row r = sheet.getRow(row);
                         r.getCell(0).setCellType(CellType.STRING);
@@ -284,6 +313,8 @@ public class FileController {
                     }
                     break;
                 case "论文电子版提交名单":
+                    if (!check(3, sheet))
+                        return Constant.code_fail;
                     for (int row = 1; row < rowNumbers; row++) {
                         Row r = sheet.getRow(row);
                         r.getCell(0).setCellType(CellType.STRING);

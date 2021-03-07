@@ -17,7 +17,7 @@ public class Constant {
     public static int examine_unknown = 3;
 
     //file store path
-    public static String storePath = "E://test";
+    public static String storePath = "/Users/root/test";
 
     //实习阶段
     public static int student_status1 = 1;
