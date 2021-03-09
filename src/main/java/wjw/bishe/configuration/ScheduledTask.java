@@ -23,7 +23,7 @@ public class ScheduledTask {
     UserDao userDao;
 
     //暂时设定为一分钟执行一次，正式部署的时候改为一个月执行一次
-    @Scheduled(cron = "0 10 0 1 * ?")
+    @Scheduled(cron = "0 0/1 * * * ?")
     private void task() {
         List<Student> list = this.userDao.getAllStudent();
         for (Student student : list) {
@@ -35,6 +35,8 @@ public class ScheduledTask {
 
     private boolean check(String uid) {
         Internship internship = this.examineDao.getIntern(uid);
+        if (internship == null)
+            return false;
         return internship.getExamineStatus1() == Constant.examine_success &&
                 internship.getExamineStatus2() == Constant.examine_success &&
                 internship.getExamineStatus3() == Constant.examine_success;

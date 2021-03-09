@@ -65,4 +65,16 @@ public class UserController {
         }
         return loginResponse;
     }
+
+    @GetMapping("/getBook")
+    public boolean getBook(@RequestParam String username) {
+        Student student = this.userService.getStudent(username);
+        return student.isBook();
+    }
+
+    @GetMapping("/getPaper")
+    public boolean getPaper(@RequestParam String username) {
+        Student student = this.userService.getStudent(username);
+        return student.isPaper();
+    }
 }

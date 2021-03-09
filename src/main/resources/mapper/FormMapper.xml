@@ -30,13 +30,13 @@
     </select>
 
     <insert id="createJob" parameterType="wjw.bishe.entity.Job">
-        insert into Job(uid, name, type, company, base, salary)
+        insert into job(uid, name, type, company, base, salary)
         values (#{uid}, #{name}, #{type}, #{company}, #{base}, #{salary})
     </insert>
 
     <select id="getJob" resultType="wjw.bishe.entity.Job">
         select *
-        from Job
+        from job
         where uid = #{uid}
     </select>
 
