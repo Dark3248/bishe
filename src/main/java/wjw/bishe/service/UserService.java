@@ -1,7 +1,8 @@
 package wjw.bishe.service;
 
-import wjw.bishe.entity.Student;
-import wjw.bishe.entity.User;
+import wjw.bishe.entity.*;
+
+import java.util.List;
 
 public interface UserService {
 
@@ -10,4 +11,10 @@ public interface UserService {
     Student getStudent(String username);
 
     User login2(String username, String password);
+
+    List<Internship> getAllInternship();
+
+    List<Job> getAllJob();
+
+    List<Graduation> getAllGraduation();
 }

@@ -3,9 +3,10 @@ package wjw.bishe.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import wjw.bishe.dao.UserDao;
-import wjw.bishe.entity.Student;
-import wjw.bishe.entity.User;
+import wjw.bishe.entity.*;
 import wjw.bishe.service.UserService;
+
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -29,5 +30,20 @@ public class UserServiceImpl implements UserService {
     @Override
     public User login2(String username, String password) {
         return userDao.getByUsernameAndPassword(username, password);
+    }
+
+    @Override
+    public List<Internship> getAllInternship() {
+        return this.userDao.getAllInternship();
+    }
+
+    @Override
+    public List<Job> getAllJob() {
+        return this.userDao.getAllJob();
+    }
+
+    @Override
+    public List<Graduation> getAllGraduation() {
+        return this.userDao.getAllGraduation();
     }
 }

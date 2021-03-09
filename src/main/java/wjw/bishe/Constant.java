@@ -10,6 +10,7 @@ public class Constant {
     public static int utype_teacher = 2;
     public static int utype_admin1 = 3;
     public static int utype_admin2 = 4;
+    public static int utype_super = 5;
 
     //examine 1:success 2:fail 3:not examine
     public static int examine_success = 1;
@@ -17,7 +18,7 @@ public class Constant {
     public static int examine_unknown = 3;
 
     //file store path
-    public static String storePath = "/root/test";
+    public static String storePath = "/Users/wjw/Desktop/test";
 
     //实习阶段
     public static int student_status1 = 1;

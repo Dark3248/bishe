@@ -1,14 +1,15 @@
 package wjw.bishe.controller;
 
+import org.apache.tomcat.util.bcel.Const;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import wjw.bishe.Constant;
-import wjw.bishe.entity.Student;
-import wjw.bishe.entity.User;
+import wjw.bishe.entity.*;
 import wjw.bishe.response.LoginResponse;
 import wjw.bishe.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @RestController
 @RequestMapping("/user")
@@ -54,8 +55,10 @@ public class UserController {
                 loginResponse.setName("班主任");
             } else if (type == Constant.utype_admin1) {
                 loginResponse.setName("学籍管理员");
-            } else {
+            } else if (type == Constant.utype_admin2) {
                 loginResponse.setName("部门管理员");
+            } else {
+                loginResponse.setName("超级管理员");
             }
             loginResponse.setUtype(type);
             loginResponse.setUsername(user.getUsername());
@@ -76,5 +79,20 @@ public class UserController {
     public boolean getPaper(@RequestParam String username) {
         Student student = this.userService.getStudent(username);
         return student.isPaper();
+    }
+
+    @GetMapping("/getInternship")
+    public List<Internship> getInternship() {
+        return this.userService.getAllInternship();
+    }
+
+    @GetMapping("/getJob")
+    public List<Job> getJob() {
+        return this.userService.getAllJob();
+    }
+
+    @GetMapping("/getGraduation")
+    public List<Graduation> getGraduation() {
+        return this.userService.getAllGraduation();
     }
 }

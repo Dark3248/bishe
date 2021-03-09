@@ -2,8 +2,7 @@ package wjw.bishe.dao;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
-import wjw.bishe.entity.Student;
-import wjw.bishe.entity.User;
+import wjw.bishe.entity.*;
 
 import java.util.List;
 
@@ -20,4 +19,10 @@ public interface UserDao {
     void changeStatus(String uid, int status);
 
     List<Student> getAllStudent();
+
+    List<Internship> getAllInternship();
+
+    List<Job> getAllJob();
+
+    List<Graduation> getAllGraduation();
 }

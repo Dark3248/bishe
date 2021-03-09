@@ -35,4 +35,19 @@
         from student
         where status = 1
     </select>
+
+    <select id="getAllInternship" resultType="wjw.bishe.entity.Internship">
+        select *
+        from internship
+    </select>
+
+    <select id="getAllJob" resultType="wjw.bishe.entity.Job">
+        select *
+        from job
+    </select>
+
+    <select id="getAllGraduation" resultType="wjw.bishe.entity.Graduation">
+        select *
+        from graduation
+    </select>
 </mapper>
