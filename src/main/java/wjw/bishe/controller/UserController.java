@@ -31,6 +31,12 @@ public class UserController {
                 Student student = userService.getStudent(username);
                 loginResponse.setName(student.getName());
                 loginResponse.setStatus(student.getStatus());
+            } else if (user.getUtype() == Constant.utype_teacher) {
+                loginResponse.setName("班主任");
+            } else if (user.getUtype() == Constant.utype_admin1) {
+                loginResponse.setName("学籍管理员");
+            } else if (user.getUtype() == Constant.utype_admin2) {
+                loginResponse.setName("部门管理员");
             }
             loginResponse.setCode(Constant.code_success);
             loginResponse.setMsg("登录成功");

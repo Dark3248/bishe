@@ -1,20 +1,30 @@
 package wjw.bishe.controller;
 
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.pdf.AcroFields;
+import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.PdfReader;
+import com.itextpdf.text.pdf.PdfStamper;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.tomcat.util.bcel.Const;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import wjw.bishe.Constant;
+import wjw.bishe.entity.Internship;
 import wjw.bishe.entity.Monthly;
 import wjw.bishe.response.FileResponse;
 import wjw.bishe.response.MonthlyResponse;
 import wjw.bishe.response.ValidateResponse;
 import wjw.bishe.service.FileService;
+import wjw.bishe.service.FormService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -23,9 +33,13 @@ import java.util.List;
 public class FileController {
 
     private FileService fileService;
+    private FormService formService;
+    Calendar calendar;
 
-    public FileController(@Autowired FileService fileService) {
+    public FileController(@Autowired FileService fileService, @Autowired FormService formService) {
         this.fileService = fileService;
+        this.formService = formService;
+        calendar = Calendar.getInstance();
     }
 
     @PostMapping("/uploadMonthly")
@@ -331,5 +345,89 @@ public class FileController {
             return Constant.code_fail;
         }
         return Constant.code_success;
+    }
+
+    @GetMapping("/downloadIntern")
+    public String downloadIntern(@RequestParam String username) throws IOException, DocumentException {
+        String fileName = Constant.storePath + "/download/pdf.pdf";
+        PdfReader reader = new PdfReader(fileName);
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+
+        //将要生成的目标PDF文件名称
+        PdfStamper ps = new PdfStamper(reader, bos);
+
+        //PdfContentByte under = ps.getUnderContent(1);
+
+        //设置中文字体
+        BaseFont bf = BaseFont.createFont("STSong-Light", "UniGB-UCS2-H", BaseFont.NOT_EMBEDDED);
+
+        ArrayList<BaseFont> fontList = new ArrayList<BaseFont>();
+
+        fontList.add(bf);
+
+        //取出报表模板中的所有字段
+        AcroFields fields = ps.getAcroFields();
+
+        fields.setSubstitutionFonts(fontList);
+
+        //对表单数据进行赋值
+        Internship internship = this.formService.getInternship(username);
+        fields.setField("name", internship.getName());
+        fields.setField("uid", internship.getUid());
+        fields.setField("phoneNumber", internship.getPhoneNumber());
+        fields.setField("email", internship.getEmail());
+        fields.setField("idCard", internship.getIdCard());
+        fields.setField("companyName", internship.getCompanyName());
+        fields.setField("companyWebsite", internship.getCompanyWebsite());
+        fields.setField("schoolTeacher", internship.getSchoolTeacher());
+        fields.setField("schoolTeacherPhone", internship.getSchoolTeacherPhone());
+        fields.setField("companyContact", internship.getCompanyContact());
+        fields.setField("companyContactPhone", internship.getCompanyContactPhone());
+        fields.setField("companyTeacher", internship.getCompanyTeacher());
+        fields.setField("companyTeacherPhone", internship.getCompanyTeacherPhone());
+        fields.setField("companyTeacherPost", internship.getCompanyTeacherPost());
+        fields.setField("q" + String.valueOf(internship.getCompanyTeacherQualification()), "√");
+        fields.setField("projectInfo", internship.getProjectInfo());
+        fields.setField("companyTeacherInfo", internship.getCompanyTeacherInfo());
+        if (internship.getInsuranceType() == 1) {
+            calendar.setTime(internship.getInsuranceStartDate());
+            fields.setField("year1", String.valueOf(calendar.get(Calendar.YEAR)));
+            fields.setField("month1", String.valueOf(calendar.get(Calendar.MONTH) + 1));
+            fields.setField("day1", String.valueOf(calendar.get(Calendar.DATE)));
+            calendar.setTime(internship.getInsuranceEndDate());
+            fields.setField("year11", String.valueOf(calendar.get(Calendar.YEAR)));
+            fields.setField("month11", String.valueOf(calendar.get(Calendar.MONTH) + 1));
+            fields.setField("day11", String.valueOf(calendar.get(Calendar.DATE)));
+        } else {
+            fields.setField("year2", String.valueOf(calendar.get(Calendar.YEAR)));
+            fields.setField("month2", String.valueOf(calendar.get(Calendar.MONTH) + 1));
+            fields.setField("day2", String.valueOf(calendar.get(Calendar.DATE)));
+            calendar.setTime(internship.getInsuranceEndDate());
+            fields.setField("year22", String.valueOf(calendar.get(Calendar.YEAR)));
+            fields.setField("month22", String.valueOf(calendar.get(Calendar.MONTH) + 1));
+            fields.setField("day22", String.valueOf(calendar.get(Calendar.DATE)));
+        }
+
+        //必须要调用这个，否则文档不会生成的
+        ps.setFormFlattening(true);
+
+        ps.close();
+
+        String path = Constant.storePath + "/download/" + username + "/";
+        File file = new File(path);
+        if (!file.exists())
+            file.mkdirs();
+
+        OutputStream fos = new FileOutputStream(path + username + ".pdf");
+
+        fos.write(bos.toByteArray());
+
+        fos.flush();
+
+        fos.close();
+
+        bos.close();
+
+        return "/download/" + username + "/" + username + ".pdf";
     }
 }
