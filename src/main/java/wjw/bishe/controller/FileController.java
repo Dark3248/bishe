@@ -141,8 +141,6 @@ public class FileController {
     public void removeAll(@RequestParam String username) {
         File resume = new File(Constant.storePath + "/resume/" + username);
         File insurance = new File(Constant.storePath + "/insurance/" + username);
-        File tuition = new File(Constant.storePath + "/tuition/" + username);
-        File grade = new File(Constant.storePath + "/grade/" + username);
         File contract = new File(Constant.storePath + "/contract/" + username);
         File liangfang = new File(Constant.storePath + "/liangfang/" + username);
         if (resume.exists()) {
@@ -150,12 +148,6 @@ public class FileController {
         }
         if (insurance.exists()) {
             delete(insurance);
-        }
-        if (tuition.exists()) {
-            delete(tuition);
-        }
-        if (grade.exists()) {
-            delete(grade);
         }
         if (contract.exists()) {
             delete(contract);
@@ -176,8 +168,6 @@ public class FileController {
                                      @RequestParam int type) {
         File resume = new File(Constant.storePath + "/resume/" + username);
         File insurance = new File(Constant.storePath + "/insurance/" + username);
-        File tuition = new File(Constant.storePath + "/tuition/" + username);
-        File grade = new File(Constant.storePath + "/grade/" + username);
         File contract = new File(Constant.storePath + "/contract/" + username);
         File liangfang = new File(Constant.storePath + "/liangfang/" + username);
         StringBuilder strResume = new StringBuilder();
@@ -188,8 +178,6 @@ public class FileController {
 
         if (resume.exists() && resume.list().length > 0 &&
                 insurance.exists() && insurance.list().length > 0 &&
-                tuition.exists() && tuition.list().length > 0 &&
-                grade.exists() && grade.list().length > 0 &&
                 contract.exists() && contract.list().length > 0) {
 
             for (String file : resume.list()) {
@@ -197,12 +185,6 @@ public class FileController {
             }
             for (String file : insurance.list()) {
                 strInsurance.append("/insurance/").append(username).append('/').append(file).append(";");
-            }
-            for (String file : tuition.list()) {
-                strTuition.append("/tuition/").append(username).append('/').append(file).append(";");
-            }
-            for (String file : grade.list()) {
-                strGrade.append("/grade/").append(username).append('/').append(file).append(";");
             }
             for (String file : contract.list()) {
                 strContract.append("/contract/").append(username).append('/').append(file).append(";");
@@ -270,7 +252,7 @@ public class FileController {
                         String name = r.getCell(1).getStringCellValue();
                         r.getCell(2).setCellType(CellType.STRING);
                         String teacher = r.getCell(2).getStringCellValue();
-                        this.fileService.addStudent(uid, name, teacher);
+                        this.fileService.addStudent(uid, name, Constant.teacher.get(teacher));
                     }
                     break;
                 case "通过开题答辩名单":
@@ -339,6 +321,36 @@ public class FileController {
                             this.fileService.changePaper(uid);
                     }
                     break;
+                case "导入学费信息":
+                    if (!check(2, sheet))
+                        return Constant.code_fail;
+                    for (int row = 1; row < rowNumbers; row++) {
+                        Row r = sheet.getRow(row);
+                        r.getCell(0).setCellType(CellType.STRING);
+                        String uid = r.getCell(0).getStringCellValue();
+                        r.getCell(2).setCellType(CellType.STRING);
+                        String bool = r.getCell(2).getStringCellValue();
+                        if (bool.equals("是"))
+                            this.fileService.changeTuition(uid, 1);
+                        else if (bool.equals("否"))
+                            this.fileService.changeTuition(uid, 0);
+                    }
+                    break;
+                case "导入成绩单信息":
+                    if (!check(2, sheet))
+                        return Constant.code_fail;
+                    for (int row = 1; row < rowNumbers; row++) {
+                        Row r = sheet.getRow(row);
+                        r.getCell(0).setCellType(CellType.STRING);
+                        String uid = r.getCell(0).getStringCellValue();
+                        r.getCell(2).setCellType(CellType.STRING);
+                        String bool = r.getCell(2).getStringCellValue();
+                        if (bool.equals("是"))
+                            this.fileService.changeGrade(uid, 1);
+                        else if(bool.equals("否"))
+                            this.fileService.changeGrade(uid, 0);
+                    }
+                    break;
             }
             workbook.close();
         } catch (IOException e) {
@@ -356,12 +368,10 @@ public class FileController {
         //将要生成的目标PDF文件名称
         PdfStamper ps = new PdfStamper(reader, bos);
 
-        //PdfContentByte under = ps.getUnderContent(1);
-
         //设置中文字体
         BaseFont bf = BaseFont.createFont("STSong-Light", "UniGB-UCS2-H", BaseFont.NOT_EMBEDDED);
 
-        ArrayList<BaseFont> fontList = new ArrayList<BaseFont>();
+        ArrayList<BaseFont> fontList = new ArrayList<>();
 
         fontList.add(bf);
 

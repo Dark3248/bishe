@@ -7,6 +7,24 @@ public class Student {
     int type;
     boolean book;
     boolean paper;
+    boolean tuition;
+    boolean grade;
+
+    public boolean isTuition() {
+        return tuition;
+    }
+
+    public void setTuition(boolean tuition) {
+        this.tuition = tuition;
+    }
+
+    public boolean isGrade() {
+        return grade;
+    }
+
+    public void setGrade(boolean grade) {
+        this.grade = grade;
+    }
 
     public String getUid() {
         return uid;

@@ -22,8 +22,8 @@
     </update>
 
     <insert id="addStudent">
-        insert into student (uid, name, status, book, paper, teacher)
-        values (#{uid}, #{name}, 1, 0, 0, #{teacher})
+        insert into student (uid, name, status, book, paper, teacher, tuition, grade)
+        values (#{uid}, #{name}, 1, 0, 0, #{teacher}, 0, 0)
     </insert>
 
     <insert id="addUser">
@@ -40,6 +40,18 @@
     <update id="changePaper">
         update student
         set paper = 1
+        where uid = #{uid}
+    </update>
+
+    <update id="changeTuition">
+        update student
+        set tuition = #{num}
+        where uid = #{uid}
+    </update>
+
+    <update id="changeGrade">
+        update student
+        set grade = #{num}
         where uid = #{uid}
     </update>
 

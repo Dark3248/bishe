@@ -26,5 +26,9 @@ public interface FileDao {
 
     void changePaper(String uid);
 
+    void changeTuition(String uid, int num);
+
+    void changeGrade(String uid, int num);
+
     Student getStudent(String uid);
 }

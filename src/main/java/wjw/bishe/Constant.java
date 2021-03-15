@@ -1,5 +1,8 @@
 package wjw.bishe;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Constant {
     //return code
     public static int code_success = 1;
@@ -18,8 +21,8 @@ public class Constant {
     public static int examine_unknown = 3;
 
     //file store path
-//    public static String storePath = "/root/test";
-    public static String storePath = "/Users/wjw/Desktop/test";
+    public static String storePath = "/root/test";
+//    public static String storePath = "/Users/wjw/Desktop/test";
 
     //实习阶段
     public static int student_status1 = 1;
@@ -36,4 +39,13 @@ public class Constant {
     //毕业
     public static int student_status7 = 7;
 
+    public static Map<String, String> teacher = new HashMap<>();
+    static {
+        teacher.put("张云晓", "95428");
+        teacher.put("赵丹", "95055");
+        teacher.put("刘佳", "95373");
+        teacher.put("穆妍霖", "95737");
+        teacher.put("秦洋", "95176");
+        teacher.put("赵玲玲", "95736");
+    }
 }

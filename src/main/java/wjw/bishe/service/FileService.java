@@ -21,4 +21,8 @@ public interface FileService {
 
     void changePaper(String uid);
 
+    void changeTuition(String uid, int num);
+
+    void changeGrade(String uid, int num);
+
 }

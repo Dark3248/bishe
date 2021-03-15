@@ -37,6 +37,8 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public void addStudent(String uid, String name, String teacher) {
+        if (this.fileDao.getStudent(uid) != null)
+            return;
         this.fileDao.addStudent(uid, name, teacher);
         this.fileDao.addUser(uid);
     }
@@ -69,6 +71,16 @@ public class FileServiceImpl implements FileService {
         if (check(uid)) {
             this.userDao.changeStatus(uid, Constant.student_status7);
         }
+    }
+
+    @Override
+    public void changeTuition(String uid, int num) {
+        this.fileDao.changeTuition(uid, num);
+    }
+
+    @Override
+    public void changeGrade(String uid, int num) {
+        this.fileDao.changeGrade(uid, num);
     }
 
     private boolean check(String uid) {
