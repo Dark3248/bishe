@@ -17,4 +17,8 @@ public interface UserService {
     List<Job> getAllJob();
 
     List<Graduation> getAllGraduation();
+
+    List<Student> getAllStudent();
+
+    List<Student> getStudentByTeacher(String teacher);
 }

@@ -50,4 +50,15 @@
         select *
         from graduation
     </select>
+
+    <select id="getAllStudent2" resultType="wjw.bishe.entity.Student">
+        select *
+        from  bishe.student
+    </select>
+
+    <select id="getStudentByTeacher" resultType="wjw.bishe.entity.Student">
+        select *
+        from bishe.student
+        where teacher = #{teacher}
+    </select>
 </mapper>

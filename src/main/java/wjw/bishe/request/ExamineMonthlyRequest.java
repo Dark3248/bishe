@@ -5,6 +5,7 @@ public class ExamineMonthlyRequest {
     int num;
     int examineStatus;
     String examineContent;
+    String examiner;
 
     public String getUid() {
         return uid;
@@ -28,6 +29,14 @@ public class ExamineMonthlyRequest {
 
     public void setExamineStatus(int examineStatus) {
         this.examineStatus = examineStatus;
+    }
+
+    public String getExaminer() {
+        return examiner;
+    }
+
+    public void setExaminer(String examiner) {
+        this.examiner = examiner;
     }
 
     public String getExamineContent() {

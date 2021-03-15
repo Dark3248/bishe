@@ -2,6 +2,7 @@ package wjw.bishe.dao;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
+import wjw.bishe.entity.Examine;
 import wjw.bishe.entity.Internship;
 import wjw.bishe.entity.Monthly;
 import wjw.bishe.request.ExamineMonthlyRequest;
@@ -24,6 +25,8 @@ public interface ExamineDao {
 
     List<Monthly> getMonthly(String uid);
 
+    List<Examine> getExamine(String uid);
+
     void examine1(ExamineRequest request);
 
     void examine2(ExamineRequest request);
@@ -31,4 +34,6 @@ public interface ExamineDao {
     void examine3(ExamineRequest request);
 
     void examineMonthly(ExamineMonthlyRequest request);
+
+    void addExamine(Examine examine);
 }

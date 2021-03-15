@@ -101,4 +101,13 @@ public class UserController {
     public List<Graduation> getGraduation() {
         return this.userService.getAllGraduation();
     }
+
+    @GetMapping("/getAllStudent")
+    public List<Student> getAllStudent(@RequestParam int type, @RequestParam String teacher) {
+        if (type == 1) {
+            return this.userService.getAllStudent();
+        } else {
+            return this.userService.getStudentByTeacher(teacher);
+        }
+    }
 }

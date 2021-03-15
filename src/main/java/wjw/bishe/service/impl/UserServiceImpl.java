@@ -46,4 +46,14 @@ public class UserServiceImpl implements UserService {
     public List<Graduation> getAllGraduation() {
         return this.userDao.getAllGraduation();
     }
+
+    @Override
+    public List<Student> getAllStudent() {
+        return this.userDao.getAllStudent2();
+    }
+
+    @Override
+    public List<Student> getStudentByTeacher(String teacher) {
+        return this.userDao.getStudentByTeacher(teacher);
+    }
 }

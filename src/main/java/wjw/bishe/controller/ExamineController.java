@@ -2,6 +2,7 @@ package wjw.bishe.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import wjw.bishe.entity.Examine;
 import wjw.bishe.entity.Internship;
 import wjw.bishe.entity.Monthly;
 import wjw.bishe.request.ExamineMonthlyRequest;
@@ -100,6 +101,11 @@ public class ExamineController {
             res.add(response);
         }
         return res;
+    }
+
+    @GetMapping("getExamine")
+    public List<Examine> getExamine(@RequestParam String username) {
+        return this.examineService.getExamine(username);
     }
 
     @PostMapping("/")

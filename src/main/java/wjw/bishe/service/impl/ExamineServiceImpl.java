@@ -6,6 +6,7 @@ import wjw.bishe.Constant;
 import wjw.bishe.dao.ExamineDao;
 import wjw.bishe.dao.FileDao;
 import wjw.bishe.dao.UserDao;
+import wjw.bishe.entity.Examine;
 import wjw.bishe.entity.Internship;
 import wjw.bishe.entity.Monthly;
 import wjw.bishe.entity.Student;
@@ -16,6 +17,7 @@ import wjw.bishe.service.ExamineService;
 
 import java.io.File;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -61,6 +63,11 @@ public class ExamineServiceImpl implements ExamineService {
     }
 
     @Override
+    public List<Examine> getExamine(String uid) {
+        return this.examineDao.getExamine(uid);
+    }
+
+    @Override
     public void examine(ExamineRequest request) {
         String username = request.getUid();
         File resume = new File(Constant.storePath + "/resume/" + username);
@@ -69,18 +76,22 @@ public class ExamineServiceImpl implements ExamineService {
         File grade = new File(Constant.storePath + "/grade/" + username);
         File contract = new File(Constant.storePath + "/contract/" + username);
         File liangfang = new File(Constant.storePath + "/liangfang/" + username);
+        boolean pass = true;
         if (request.getType() == Constant.utype_teacher) {
             if (request.getExamineStatus() == 2) {
+                pass = false;
                 delete(grade);
             }
             this.examineDao.examine1(request);
         } else if (request.getType() == Constant.utype_admin1) {
             if (request.getExamineStatus() == 2) {
                 delete(tuition);
+                pass = false;
             }
             this.examineDao.examine2(request);
         } else {
             if (request.getExamineStatus() == 2) {
+                pass = false;
                 delete(resume);
                 delete(insurance);
                 delete(contract);
@@ -89,6 +100,7 @@ public class ExamineServiceImpl implements ExamineService {
             }
             this.examineDao.examine3(request);
         }
+        this.examineDao.addExamine(new Examine(username, pass, request.getType(), new Date(), request.getExaminer()));
     }
 
     private void delete(File f) {
@@ -100,6 +112,10 @@ public class ExamineServiceImpl implements ExamineService {
     @Override
     public void examine2(ExamineMonthlyRequest request) {
         this.examineDao.examineMonthly(request);
+        boolean pass = false;
+        if (request.getExamineStatus() == 1)
+            pass = true;
+        this.examineDao.addExamine(new Examine(request.getUid(), pass, 5, new Date(), request.getExaminer()));
         String uid = request.getUid();
         if (check2(uid)) {
             Student student = this.userDao.getStudent(uid);

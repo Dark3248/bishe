@@ -65,4 +65,15 @@
         set examine_status = #{examineStatus}, examine_content = #{examineContent}
         where uid = #{uid} and num = #{num}
     </update>
+
+    <insert id="addExamine" parameterType="wjw.bishe.entity.Examine">
+        insert into examine(uid, pass, type, date, examiner)
+        values (#{uid}, #{pass}, #{type}, #{date}, #{examiner})
+    </insert>
+
+    <select id="getExamine" resultType="wjw.bishe.entity.Examine">
+        select *
+        from examine
+        where #{uid} = examiner
+    </select>
 </mapper>

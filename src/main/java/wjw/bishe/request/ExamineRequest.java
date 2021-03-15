@@ -5,6 +5,7 @@ public class ExamineRequest {
     int examineStatus;
     String examineContent;
     int type;
+    String examiner;
 
     public String getUid() {
         return uid;
@@ -36,5 +37,13 @@ public class ExamineRequest {
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    public String getExaminer() {
+        return examiner;
+    }
+
+    public void setExaminer(String examiner) {
+        this.examiner = examiner;
     }
 }

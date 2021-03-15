@@ -1,5 +1,6 @@
 package wjw.bishe.service;
 
+import wjw.bishe.entity.Examine;
 import wjw.bishe.entity.Internship;
 import wjw.bishe.entity.Monthly;
 import wjw.bishe.request.ExamineMonthlyRequest;
@@ -19,7 +20,10 @@ public interface ExamineService {
 
     List<Monthly> getMonthly(String uid);
 
+    List<Examine> getExamine(String uid);
+
     void examine(ExamineRequest request);
 
     void examine2(ExamineMonthlyRequest request);
+
 }
