@@ -24,7 +24,7 @@ public class ScheduledTask {
     UserDao userDao;
 
     //暂时设定为一分钟执行一次，正式部署的时候改为一个月执行一次
-    @Scheduled(cron = "0 0/1 * * * ?")
+    @Scheduled(cron = "0 0 0 1 * ?")
     private void task() {
         List<Student> list = this.userDao.getAllStudent();
         for (Student student : list) {

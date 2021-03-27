@@ -47,5 +47,11 @@ public class Constant {
         teacher.put("穆妍霖", "95737");
         teacher.put("秦洋", "95176");
         teacher.put("赵玲玲", "95736");
+        teacher.put("95428", "张云晓");
+        teacher.put("95055", "赵丹");
+        teacher.put("95373", "刘佳");
+        teacher.put("95737", "穆妍霖");
+        teacher.put("95176", "秦洋");
+        teacher.put("95736", "赵玲玲");
     }
 }

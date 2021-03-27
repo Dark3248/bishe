@@ -6,9 +6,11 @@ import org.springframework.web.bind.annotation.*;
 import wjw.bishe.Constant;
 import wjw.bishe.entity.*;
 import wjw.bishe.response.LoginResponse;
+import wjw.bishe.response.UsersResponse;
 import wjw.bishe.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -29,6 +31,11 @@ public class UserController {
         if (user != null) {
             if (user.getUtype() == Constant.utype_student) {
                 Student student = userService.getStudent(username);
+                if (student == null) {
+                    loginResponse.setCode(Constant.code_fail);
+                    loginResponse.setMsg("登录失败");
+                    return loginResponse;
+                }
                 loginResponse.setName(student.getName());
                 loginResponse.setStatus(student.getStatus());
             } else if (user.getUtype() == Constant.utype_teacher) {
@@ -109,5 +116,29 @@ public class UserController {
         } else {
             return this.userService.getStudentByTeacher(teacher);
         }
+    }
+
+    @GetMapping("/getAllUsers")
+    public List<UsersResponse> getAllUsers() {
+        List<User> list = userService.getAllUsers();
+        List<UsersResponse> res = new ArrayList<>();
+        for (User user : list) {
+            UsersResponse response = new UsersResponse();
+            response.setUsername(user.getUsername());
+            response.setName(Constant.teacher.get(user.getUsername()));
+            switch (user.getUtype()) {
+                case 2:
+                    response.setUtype("班主任");
+                    break;
+                case 3:
+                    response.setUtype("学籍管理员");
+                    break;
+                case 4:
+                    response.setUtype("部门管理员");
+                    break;
+            }
+            res.add(response);
+        }
+        return res;
     }
 }

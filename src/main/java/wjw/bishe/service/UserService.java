@@ -21,4 +21,6 @@ public interface UserService {
     List<Student> getAllStudent();
 
     List<Student> getStudentByTeacher(String teacher);
+
+    List<User> getAllUsers();
 }

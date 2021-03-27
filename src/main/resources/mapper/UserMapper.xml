@@ -61,4 +61,11 @@
         from bishe.student
         where teacher = #{teacher}
     </select>
+
+    <select id="getAllUsers" resultType="wjw.bishe.entity.User">
+        select *
+        from bishe.user
+        where utype != 1 and utype != 5
+    </select>
+
 </mapper>

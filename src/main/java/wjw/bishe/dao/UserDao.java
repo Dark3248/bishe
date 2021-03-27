@@ -29,4 +29,6 @@ public interface UserDao {
     List<Student> getAllStudent2();
 
     List<Student> getStudentByTeacher(String teacher);
+
+    List<User> getAllUsers();
 }
