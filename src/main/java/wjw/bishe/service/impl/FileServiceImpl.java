@@ -36,10 +36,14 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public void addStudent(String uid, String name, String teacher) {
+    public void addStudent(String uid, String name, String teacher, String direction) {
         if (this.fileDao.getStudent(uid) != null)
             return;
-        this.fileDao.addStudent(uid, name, teacher);
+        String tmp = uid.substring(0, 2);
+        if (tmp.equals("ZY"))
+            this.fileDao.addStudent(uid, name, teacher, 1, direction);
+        else
+            this.fileDao.addStudent(uid, name, teacher, 2, direction);
         this.fileDao.addUser(uid);
     }
 

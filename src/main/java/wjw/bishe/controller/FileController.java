@@ -218,7 +218,9 @@ public class FileController {
         r.getCell(2).setCellType(CellType.STRING);
         String bool2 = r.getCell(2).getStringCellValue();
         if (type == 1) {
-            return bool0.equals("学号") && bool1.equals("姓名") && bool2.equals("班主任");
+            r.getCell(3).setCellType(CellType.STRING);
+            String bool3 = r.getCell(3).getStringCellValue();
+            return bool0.equals("学号") && bool1.equals("姓名") && bool2.equals("班主任") && bool3.equals("研究方向");
         } else if (type == 2) {
             return bool0.equals("学号") && bool1.equals("姓名") && bool2.equals("是否通过");
         } else if (type == 3) {
@@ -252,7 +254,9 @@ public class FileController {
                         String name = r.getCell(1).getStringCellValue();
                         r.getCell(2).setCellType(CellType.STRING);
                         String teacher = r.getCell(2).getStringCellValue();
-                        this.fileService.addStudent(uid, name, Constant.teacher.get(teacher));
+                        r.getCell(3).setCellType(CellType.STRING);
+                        String direction = r.getCell(3).getStringCellValue();
+                        this.fileService.addStudent(uid, name, Constant.teacher.get(teacher), direction);
                     }
                     break;
                 case "通过开题答辩名单":

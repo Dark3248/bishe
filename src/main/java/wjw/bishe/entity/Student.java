@@ -9,6 +9,7 @@ public class Student {
     boolean paper;
     boolean tuition;
     boolean grade;
+    String direction;
 
     public boolean isTuition() {
         return tuition;
@@ -72,5 +73,13 @@ public class Student {
 
     public void setPaper(boolean paper) {
         this.paper = paper;
+    }
+
+    public String getDirection() {
+        return direction;
+    }
+
+    public void setDirection(String direction) {
+        this.direction = direction;
     }
 }
