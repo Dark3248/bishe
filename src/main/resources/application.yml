@@ -3,15 +3,15 @@ spring:
     name: bishe
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-#    url: jdbc:mysql://localhost:3306/bishe?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8
-    url: jdbc:mysql://10.251.0.57:3331/bishe?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8
+    url: jdbc:mysql://localhost:3306/bishe?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8
+#    url: jdbc:mysql://10.251.0.57:3331/bishe?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8
     username: root
-#    password: rootroot
-    password: SOFT_sql2021
+    password: rootroot
+#    password: SOFT_sql2021
   web:
     resources:
-#      static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/,file:/Users/wjw/Desktop/test
-      static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/,file:/root/test
+      static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/,file:/Users/wjw/Desktop/test
+#      static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/,file:/root/test
   servlet:
     multipart:
       max-file-size: 10MB

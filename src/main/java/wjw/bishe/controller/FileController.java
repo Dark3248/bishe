@@ -1,13 +1,13 @@
 package wjw.bishe.controller;
 
 import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Font;
 import com.itextpdf.text.pdf.AcroFields;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfStamper;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.apache.tomcat.util.bcel.Const;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,11 +22,7 @@ import wjw.bishe.service.FormService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @RestController
 @RequestMapping("/file")
@@ -218,9 +214,7 @@ public class FileController {
         r.getCell(2).setCellType(CellType.STRING);
         String bool2 = r.getCell(2).getStringCellValue();
         if (type == 1) {
-            r.getCell(3).setCellType(CellType.STRING);
-            String bool3 = r.getCell(3).getStringCellValue();
-            return bool0.equals("学号") && bool1.equals("姓名") && bool2.equals("班主任") && bool3.equals("研究方向");
+            return bool0.equals("学号") && bool1.equals("姓名") && bool2.equals("研究方向");
         } else if (type == 2) {
             return bool0.equals("学号") && bool1.equals("姓名") && bool2.equals("是否通过");
         } else if (type == 3) {
@@ -243,7 +237,7 @@ public class FileController {
             }
             switch (type) {
                 case "导入学生名单":
-                    //学号 姓名 班主任
+                    //学号 姓名 专业方向
                     if (!check(1, sheet))
                         return Constant.code_fail;
                     for (int row = 1; row < rowNumbers; row++) {
@@ -253,10 +247,8 @@ public class FileController {
                         r.getCell(1).setCellType(CellType.STRING);
                         String name = r.getCell(1).getStringCellValue();
                         r.getCell(2).setCellType(CellType.STRING);
-                        String teacher = r.getCell(2).getStringCellValue();
-                        r.getCell(3).setCellType(CellType.STRING);
-                        String direction = r.getCell(3).getStringCellValue();
-                        this.fileService.addStudent(uid, name, Constant.teacher.get(teacher), direction);
+                        String direction = r.getCell(2).getStringCellValue();
+                        this.fileService.addStudent(uid, name, direction);
                     }
                     break;
                 case "通过开题答辩名单":
@@ -373,54 +365,17 @@ public class FileController {
         PdfStamper ps = new PdfStamper(reader, bos);
 
         //设置中文字体
-        BaseFont bf = BaseFont.createFont("STSong-Light", "UniGB-UCS2-H", BaseFont.NOT_EMBEDDED);
-
+        BaseFont bf = BaseFont.createFont("STSongStd-Light", "UniGB-UCS2-H", BaseFont.NOT_EMBEDDED);
         ArrayList<BaseFont> fontList = new ArrayList<>();
 
         fontList.add(bf);
 
         //取出报表模板中的所有字段
         AcroFields fields = ps.getAcroFields();
-
         fields.setSubstitutionFonts(fontList);
 
         //对表单数据进行赋值
-        Internship internship = this.formService.getInternship(username);
-        fields.setField("name", internship.getName());
-        fields.setField("uid", internship.getUid());
-        fields.setField("phoneNumber", internship.getPhoneNumber());
-        fields.setField("email", internship.getEmail());
-        fields.setField("idCard", internship.getIdCard());
-        fields.setField("companyName", internship.getCompanyName());
-        fields.setField("companyWebsite", internship.getCompanyWebsite());
-        fields.setField("schoolTeacher", internship.getSchoolTeacher());
-        fields.setField("schoolTeacherPhone", internship.getSchoolTeacherPhone());
-        fields.setField("companyContact", internship.getCompanyContact());
-        fields.setField("companyContactPhone", internship.getCompanyContactPhone());
-        fields.setField("companyTeacher", internship.getCompanyTeacher());
-        fields.setField("companyTeacherPhone", internship.getCompanyTeacherPhone());
-        fields.setField("companyTeacherPost", internship.getCompanyTeacherPost());
-        fields.setField("q" + String.valueOf(internship.getCompanyTeacherQualification()), "√");
-        fields.setField("projectInfo", internship.getProjectInfo());
-        fields.setField("companyTeacherInfo", internship.getCompanyTeacherInfo());
-        if (internship.getInsuranceType() == 1) {
-            calendar.setTime(internship.getInsuranceStartDate());
-            fields.setField("year1", String.valueOf(calendar.get(Calendar.YEAR)));
-            fields.setField("month1", String.valueOf(calendar.get(Calendar.MONTH) + 1));
-            fields.setField("day1", String.valueOf(calendar.get(Calendar.DATE)));
-            calendar.setTime(internship.getInsuranceEndDate());
-            fields.setField("year11", String.valueOf(calendar.get(Calendar.YEAR)));
-            fields.setField("month11", String.valueOf(calendar.get(Calendar.MONTH) + 1));
-            fields.setField("day11", String.valueOf(calendar.get(Calendar.DATE)));
-        } else {
-            fields.setField("year2", String.valueOf(calendar.get(Calendar.YEAR)));
-            fields.setField("month2", String.valueOf(calendar.get(Calendar.MONTH) + 1));
-            fields.setField("day2", String.valueOf(calendar.get(Calendar.DATE)));
-            calendar.setTime(internship.getInsuranceEndDate());
-            fields.setField("year22", String.valueOf(calendar.get(Calendar.YEAR)));
-            fields.setField("month22", String.valueOf(calendar.get(Calendar.MONTH) + 1));
-            fields.setField("day22", String.valueOf(calendar.get(Calendar.DATE)));
-        }
+        fillData(fields, username);
 
         //必须要调用这个，否则文档不会生成的
         ps.setFormFlattening(true);
@@ -443,5 +398,73 @@ public class FileController {
         bos.close();
 
         return "/download/" + username + "/" + username + ".pdf";
+    }
+
+    void fillData(AcroFields fields, String username) throws IOException, DocumentException {
+        Internship internship = this.formService.getInternship(username);
+        fields.setFieldProperty("name", "textsize", 10f, null);
+        fields.setField("name", internship.getName());
+        fields.setFieldProperty("uid", "textsize", 10f, null);
+        fields.setField("uid", internship.getUid());
+        fields.setFieldProperty("phoneNumber", "textsize", 10f, null);
+        fields.setField("phoneNumber", internship.getPhoneNumber());
+        fields.setFieldProperty("email", "textsize", 9f, null);
+        fields.setField("email", internship.getEmail());
+        fields.setFieldProperty("idCard", "textsize", 10f, null);
+        fields.setField("idCard", internship.getIdCard());
+        fields.setFieldProperty("companyName", "textsize", 10f, null);
+        fields.setField("companyName", internship.getCompanyName());
+        fields.setFieldProperty("companyWebsite", "textsize", 10f, null);
+        fields.setField("companyWebsite", internship.getCompanyWebsite());
+        fields.setFieldProperty("schoolTeacher", "textsize", 10f, null);
+        fields.setField("schoolTeacher", internship.getSchoolTeacher());
+        fields.setFieldProperty("schoolTeacherPhone", "textsize", 10f, null);
+        fields.setField("schoolTeacherPhone", internship.getSchoolTeacherPhone());
+        fields.setFieldProperty("companyContact", "textsize", 10f, null);
+        fields.setField("companyContact", internship.getCompanyContact());
+        fields.setFieldProperty("companyContactPhone", "textsize", 10f, null);
+        fields.setField("companyContactPhone", internship.getCompanyContactPhone());
+        fields.setFieldProperty("companyTeacher", "textsize", 10f, null);
+        fields.setField("companyTeacher", internship.getCompanyTeacher());
+        fields.setFieldProperty("companyTeacherPhone", "textsize", 10f, null);
+        fields.setField("companyTeacherPhone", internship.getCompanyTeacherPhone());
+        fields.setFieldProperty("companyTeacherPost", "textsize", 10f, null);
+        fields.setField("companyTeacherPost", internship.getCompanyTeacherPost());
+        fields.setFieldProperty("q", "textsize", 10f, null);
+        fields.setField("q" + String.valueOf(internship.getCompanyTeacherQualification()), "√");
+        fields.setFieldProperty("projectInfo", "textsize", 10f, null);
+        fields.setField("projectInfo", internship.getProjectInfo());
+        fields.setFieldProperty("companyTeacherInfo", "textsize", 10f, null);
+        fields.setField("companyTeacherInfo", internship.getCompanyTeacherInfo());
+        if (internship.getInsuranceType() == 1) {
+            calendar.setTime(internship.getInsuranceStartDate());
+            fields.setFieldProperty("year1", "textsize", 10f, null);
+            fields.setField("year1", String.valueOf(calendar.get(Calendar.YEAR)));
+            fields.setFieldProperty("month1", "textsize", 10f, null);
+            fields.setField("month1", String.valueOf(calendar.get(Calendar.MONTH) + 1));
+            fields.setFieldProperty("day1", "textsize", 10f, null);
+            fields.setField("day1", String.valueOf(calendar.get(Calendar.DATE)));
+            calendar.setTime(internship.getInsuranceEndDate());
+            fields.setFieldProperty("year11", "textsize", 10f, null);
+            fields.setField("year11", String.valueOf(calendar.get(Calendar.YEAR)));
+            fields.setFieldProperty("month11", "textsize", 10f, null);
+            fields.setField("month11", String.valueOf(calendar.get(Calendar.MONTH) + 1));
+            fields.setFieldProperty("day11", "textsize", 10f, null);
+            fields.setField("day11", String.valueOf(calendar.get(Calendar.DATE)));
+        } else {
+            fields.setFieldProperty("year2", "textsize", 10f, null);
+            fields.setField("year2", String.valueOf(calendar.get(Calendar.YEAR)));
+            fields.setFieldProperty("month2", "textsize", 10f, null);
+            fields.setField("month2", String.valueOf(calendar.get(Calendar.MONTH) + 1));
+            fields.setFieldProperty("day2", "textsize", 10f, null);
+            fields.setField("day2", String.valueOf(calendar.get(Calendar.DATE)));
+            calendar.setTime(internship.getInsuranceEndDate());
+            fields.setFieldProperty("year22", "textsize", 10f, null);
+            fields.setField("year22", String.valueOf(calendar.get(Calendar.YEAR)));
+            fields.setFieldProperty("month22", "textsize", 10f, null);
+            fields.setField("month22", String.valueOf(calendar.get(Calendar.MONTH) + 1));
+            fields.setFieldProperty("day22", "textsize", 10f, null);
+            fields.setField("day22", String.valueOf(calendar.get(Calendar.DATE)));
+        }
     }
 }

@@ -22,8 +22,8 @@
     </update>
 
     <insert id="addStudent">
-        insert into student (uid, name, status, book, paper, teacher, tuition, grade, type, direction)
-        values (#{uid}, #{name}, 1, 0, 0, #{teacher}, 0, 0, #{type}, #{direction})
+        insert into student (uid, name, status, book, paper, tuition, grade, type, direction)
+        values (#{uid}, #{name}, 1, 0, 0, 0, 0, #{type}, #{direction})
     </insert>
 
     <insert id="addUser">

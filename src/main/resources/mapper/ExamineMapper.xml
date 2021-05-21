@@ -11,11 +11,11 @@
         where uid = #{uid}
     </select>
 
-    <select id="getGrade" resultType="wjw.bishe.entity.Internship">
-        select student.uid, grade_path, student.name
-        from internship, student
-        where internship.uid = student.uid and examine_status1 = 3 and student.teacher = #{uid}
-    </select>
+<!--    <select id="getGrade" resultType="wjw.bishe.entity.Internship">-->
+<!--        select student.uid, grade_path, student.name-->
+<!--        from internship, student-->
+<!--        where internship.uid = student.uid and examine_status1 = 3 and student.teacher = #{uid}-->
+<!--    </select>-->
 
     <select id="getTuition" resultType="wjw.bishe.entity.Internship">
         select uid, tuition_path, name

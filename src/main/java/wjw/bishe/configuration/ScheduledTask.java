@@ -26,7 +26,7 @@ public class ScheduledTask {
     //暂时设定为一分钟执行一次，正式部署的时候改为一个月执行一次
     @Scheduled(cron = "0 0 0 1 * ?")
     private void task() {
-        List<Student> list = this.userDao.getAllStudent();
+        List<Student> list = this.userDao.getStudentStatus1();
         for (Student student : list) {
             if (check(student.getUid())) {
                 userDao.changeStatus(student.getUid(), Constant.student_status2);
@@ -36,7 +36,7 @@ public class ScheduledTask {
 
     @Scheduled(cron = "0 0/1 * * * ?")
     private void task2() {
-        List<Student> list = this.userDao.getAllStudent();
+        List<Student> list = this.userDao.getStudentStatus1();
         for (Student student : list) {
             Internship internship = this.examineDao.getIntern(student.getUid());
             if (internship == null)

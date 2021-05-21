@@ -30,7 +30,7 @@
         where username = #{username} and password = #{password}
     </select>
 
-    <select id="getAllStudent" resultType="wjw.bishe.entity.Student">
+    <select id="getStudentStatus1" resultType="wjw.bishe.entity.Student">
         select *
         from student
         where status = 1
@@ -51,15 +51,15 @@
         from graduation
     </select>
 
-    <select id="getAllStudent2" resultType="wjw.bishe.entity.Student">
+    <select id="getAllStudent" resultType="wjw.bishe.entity.Student">
         select *
         from  bishe.student
     </select>
 
-    <select id="getStudentByTeacher" resultType="wjw.bishe.entity.Student">
+    <select id="getStudentByDirection" resultType="wjw.bishe.entity.Student">
         select *
         from bishe.student
-        where teacher = #{teacher}
+        where direction = #{direction}
     </select>
 
     <select id="getAllUsers" resultType="wjw.bishe.entity.User">
@@ -67,5 +67,22 @@
         from bishe.user
         where utype != 1 and utype != 5
     </select>
+
+    <select id="getDirection" resultType="String">
+        select name
+        from bishe.direction
+        where teacher = #{teacher}
+    </select>
+
+    <select id="getAllDirections" resultType="wjw.bishe.entity.Direction">
+        select *
+        from bishe.direction
+    </select>
+
+    <update id="changeDirection">
+        update bishe.direction
+        set teacher = #{teacher}
+        where name = #{name}
+    </update>
 
 </mapper>

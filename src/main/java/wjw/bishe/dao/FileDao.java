@@ -18,7 +18,7 @@ public interface FileDao {
 
     void updateMonthly(String id, int number, int examineStatus, String examineContent);
 
-    void addStudent(String uid, String name, String teacher, int type, String direction);
+    void addStudent(String uid, String name, int type, String direction);
 
     void addUser(String username);
 

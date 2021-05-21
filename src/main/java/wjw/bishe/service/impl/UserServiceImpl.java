@@ -2,10 +2,12 @@ package wjw.bishe.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import wjw.bishe.Constant;
 import wjw.bishe.dao.UserDao;
 import wjw.bishe.entity.*;
 import wjw.bishe.service.UserService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -49,16 +51,35 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<Student> getAllStudent() {
-        return this.userDao.getAllStudent2();
+        return this.userDao.getAllStudent();
     }
 
     @Override
     public List<Student> getStudentByTeacher(String teacher) {
-        return this.userDao.getStudentByTeacher(teacher);
+        List<String> directions = this.userDao.getDirection(teacher);
+        List<Student> res = new ArrayList<>();
+        for (String direction : directions) {
+            res.addAll(this.userDao.getStudentByDirection(direction));
+        }
+        return res;
     }
 
     @Override
     public List<User> getAllUsers() {
         return userDao.getAllUsers();
+    }
+
+    @Override
+    public List<Direction> getAllDirections() {
+        List<Direction> list = userDao.getAllDirections();
+        for (Direction direction : list) {
+            direction.setTeacherName(Constant.teacher.get(direction.getTeacher()));
+        }
+        return list;
+    }
+
+    @Override
+    public void changeDirection(String name, String teacher) {
+        userDao.changeDirection(name, teacher);
     }
 }

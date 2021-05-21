@@ -23,4 +23,9 @@ public interface UserService {
     List<Student> getStudentByTeacher(String teacher);
 
     List<User> getAllUsers();
+
+    List<Direction> getAllDirections();
+
+    void changeDirection(String name, String teacher);
+
 }

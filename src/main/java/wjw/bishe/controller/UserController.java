@@ -44,6 +44,8 @@ public class UserController {
                 loginResponse.setName("学籍管理员");
             } else if (user.getUtype() == Constant.utype_admin2) {
                 loginResponse.setName("部门管理员");
+            } else if (user.getUtype() == Constant.utype_super) {
+                loginResponse.setName("超级管理员");
             }
             loginResponse.setCode(Constant.code_success);
             loginResponse.setMsg("登录成功");
@@ -70,7 +72,7 @@ public class UserController {
                 loginResponse.setName("学籍管理员");
             } else if (type == Constant.utype_admin2) {
                 loginResponse.setName("部门管理员");
-            } else {
+            } else if (type == Constant.utype_super) {
                 loginResponse.setName("超级管理员");
             }
             loginResponse.setUtype(type);
@@ -140,5 +142,15 @@ public class UserController {
             res.add(response);
         }
         return res;
+    }
+
+    @GetMapping("/getDirections")
+    public List<Direction> getDirection() {
+        return userService.getAllDirections();
+    }
+
+    @PostMapping("changeDirection")
+    public void changeDirection(@RequestBody Direction direction) {
+        userService.changeDirection(direction.getName(), direction.getTeacher());
     }
 }

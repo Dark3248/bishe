@@ -18,7 +18,7 @@ public interface UserDao {
 
     void changeStatus(String uid, int status);
 
-    List<Student> getAllStudent();
+    List<Student> getStudentStatus1();
 
     List<Internship> getAllInternship();
 
@@ -26,9 +26,15 @@ public interface UserDao {
 
     List<Graduation> getAllGraduation();
 
-    List<Student> getAllStudent2();
+    List<Student> getAllStudent();
 
-    List<Student> getStudentByTeacher(String teacher);
+    List<Student> getStudentByDirection(String direction);
 
     List<User> getAllUsers();
+
+    List<String> getDirection(String teacher);
+
+    List<Direction> getAllDirections();
+
+    void changeDirection(String name, String teacher);
 }

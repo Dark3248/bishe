@@ -13,7 +13,7 @@ public interface FileService {
 
     void updateMonthly(String username, int number);
 
-    void addStudent(String uid, String name, String teacher, String direction);
+    void addStudent(String uid, String name, String direction);
 
     void changeStatus(String uid, int status);
 
