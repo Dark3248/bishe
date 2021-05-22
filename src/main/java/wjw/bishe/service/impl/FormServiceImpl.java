@@ -9,6 +9,9 @@ import wjw.bishe.entity.Internship;
 import wjw.bishe.entity.Job;
 import wjw.bishe.service.FormService;
 
+import java.util.Date;
+import java.util.List;
+
 @Service
 public class FormServiceImpl implements FormService {
 
@@ -33,7 +36,7 @@ public class FormServiceImpl implements FormService {
             internship.setExamineContent3("");
             internship.setExamineStatus3(Constant.examine_unknown);
         }
-        formDao.createInternship(internship);
+        formDao.createInternship(internship, new Date());
     }
 
     @Override
@@ -43,7 +46,7 @@ public class FormServiceImpl implements FormService {
 
     @Override
     public void createJob(Job job) {
-        this.formDao.createJob(job);
+        this.formDao.createJob(job, new Date());
     }
 
     @Override
@@ -53,11 +56,26 @@ public class FormServiceImpl implements FormService {
 
     @Override
     public void createGraduation(Graduation graduation) {
-        this.formDao.createGraduation(graduation);
+        this.formDao.createGraduation(graduation, new Date());
     }
 
     @Override
     public Graduation getGraduation(String username) {
         return this.formDao.getGraduation(username);
+    }
+
+    @Override
+    public List<Internship> getAllInternship() {
+        return this.formDao.getAllInternship();
+    }
+
+    @Override
+    public List<Job> getAllJob() {
+        return this.formDao.getAllJob();
+    }
+
+    @Override
+    public List<Graduation> getAllGraduation() {
+        return this.formDao.getAllGraduation();
     }
 }

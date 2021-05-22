@@ -1,12 +1,14 @@
 package wjw.bishe.controller;
 
 import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Font;
 import com.itextpdf.text.pdf.AcroFields;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfStamper;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -14,11 +16,13 @@ import org.springframework.web.multipart.MultipartFile;
 import wjw.bishe.Constant;
 import wjw.bishe.entity.Internship;
 import wjw.bishe.entity.Monthly;
+import wjw.bishe.entity.Student;
 import wjw.bishe.response.FileResponse;
 import wjw.bishe.response.MonthlyResponse;
 import wjw.bishe.response.ValidateResponse;
 import wjw.bishe.service.FileService;
 import wjw.bishe.service.FormService;
+import wjw.bishe.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
@@ -30,11 +34,15 @@ public class FileController {
 
     private FileService fileService;
     private FormService formService;
+    private UserService userService;
     Calendar calendar;
 
-    public FileController(@Autowired FileService fileService, @Autowired FormService formService) {
+    public FileController(@Autowired FileService fileService,
+                          @Autowired FormService formService,
+                          @Autowired UserService userService) {
         this.fileService = fileService;
         this.formService = formService;
+        this.userService = userService;
         calendar = Calendar.getInstance();
     }
 
@@ -467,4 +475,166 @@ public class FileController {
             fields.setField("day22", String.valueOf(calendar.get(Calendar.DATE)));
         }
     }
+
+    @GetMapping("/export")
+    public void export() throws IOException {
+        List<Student> students = userService.getAllStudent();
+        XSSFWorkbook workbook = new XSSFWorkbook();
+        XSSFSheet sheet = workbook.createSheet();
+        XSSFRow row0 = sheet.createRow(0);
+        int index = 0;
+        row0.createCell(index++).setCellValue("学号");
+        row0.createCell(index++).setCellValue("姓名");
+        row0.createCell(index++).setCellValue("类型");
+        row0.createCell(index++).setCellValue("研究方向");
+        row0.createCell(index++).setCellValue("当前状态");
+        row0.createCell(index++).setCellValue("学费是否提交");
+        row0.createCell(index++).setCellValue("成绩是否合格");
+        row0.createCell(index++).setCellValue("图书是否归还");
+        row0.createCell(index).setCellValue("论文电子版是否提交");
+        index = 0;
+        for (Student student : students) {
+            XSSFRow row = sheet.createRow(++index);
+            int index2 = 0;
+            row.createCell(index2++).setCellValue(student.getUid());
+            row.createCell(index2++).setCellValue(student.getName());
+            String type = "";
+            switch (student.getType()) {
+                case 1:
+                    type = "全日制";
+                    break;
+                case 2:
+                    type = "非全日制";
+                    break;
+            }
+            row.createCell(index2++).setCellValue(type);
+            row.createCell(index2++).setCellValue(student.getDirection());
+            String status = "";
+            switch (student.getStatus()) {
+                case 1:
+                    status = "实习阶段";
+                    break;
+                case 2:
+                    status = "开题阶段";
+                    break;
+                case 3:
+                    status = "开题答辩阶段";
+                    break;
+                case 4:
+                    status = "中期答辩阶段";
+                    break;
+                case 5:
+                    status = "毕业答辩阶段";
+                    break;
+                case 6:
+                    status = "离校阶段";
+                    break;
+                case 7:
+                    status = "已毕业";
+                    break;
+            }
+            row.createCell(index2++).setCellValue(status);
+            if (student.isTuition())
+                row.createCell(index2++).setCellValue("是");
+            else
+                row.createCell(index2++).setCellValue("否");
+            if (student.isGrade())
+                row.createCell(index2++).setCellValue("是");
+            else
+                row.createCell(index2++).setCellValue("否");
+            if (student.isBook())
+                row.createCell(index2++).setCellValue("是");
+            else
+                row.createCell(index2++).setCellValue("否");
+            if (student.isPaper())
+                row.createCell(index2).setCellValue("是");
+            else
+                row.createCell(index2).setCellValue("否");
+        }
+        String path = Constant.storePath + "/download/学生名单.xlsx";
+        FileOutputStream fos = new FileOutputStream(path);
+        workbook.write(fos);
+        fos.close();
+    }
+
+//    @GetMapping("/exportIntern")
+//    public void export2() throws IOException {
+//        List<Internship> students = formService.getAllInternship();
+//        XSSFWorkbook workbook = new XSSFWorkbook();
+//        XSSFSheet sheet = workbook.createSheet();
+//        XSSFRow row0 = sheet.createRow(0);
+//        int index = 0;
+//        row0.createCell(index++).setCellValue("学号");
+//        row0.createCell(index++).setCellValue("姓名");
+//        row0.createCell(index++).setCellValue("");
+//        row0.createCell(index++).setCellValue("研究方向");
+//        row0.createCell(index++).setCellValue("当前状态");
+//        row0.createCell(index++).setCellValue("学费是否提交");
+//        row0.createCell(index++).setCellValue("成绩是否合格");
+//        row0.createCell(index++).setCellValue("图书是否归还");
+//        row0.createCell(index).setCellValue("论文电子版是否提交");
+//        index = 0;
+//        for (Student student : students) {
+//            XSSFRow row = sheet.createRow(++index);
+//            int index2 = 0;
+//            row.createCell(index2++).setCellValue(student.getUid());
+//            row.createCell(index2++).setCellValue(student.getName());
+//            String type = "";
+//            switch (student.getType()) {
+//                case 1:
+//                    type = "全日制";
+//                    break;
+//                case 2:
+//                    type = "非全日制";
+//                    break;
+//            }
+//            row.createCell(index2++).setCellValue(type);
+//            row.createCell(index2++).setCellValue(student.getDirection());
+//            String status = "";
+//            switch (student.getStatus()) {
+//                case 1:
+//                    status = "实习阶段";
+//                    break;
+//                case 2:
+//                    status = "开题阶段";
+//                    break;
+//                case 3:
+//                    status = "开题答辩阶段";
+//                    break;
+//                case 4:
+//                    status = "中期答辩阶段";
+//                    break;
+//                case 5:
+//                    status = "毕业答辩阶段";
+//                    break;
+//                case 6:
+//                    status = "离校阶段";
+//                    break;
+//                case 7:
+//                    status = "已毕业";
+//                    break;
+//            }
+//            row.createCell(index2++).setCellValue(status);
+//            if (student.isTuition())
+//                row.createCell(index2++).setCellValue("是");
+//            else
+//                row.createCell(index2++).setCellValue("否");
+//            if (student.isGrade())
+//                row.createCell(index2++).setCellValue("是");
+//            else
+//                row.createCell(index2++).setCellValue("否");
+//            if (student.isBook())
+//                row.createCell(index2++).setCellValue("是");
+//            else
+//                row.createCell(index2++).setCellValue("否");
+//            if (student.isPaper())
+//                row.createCell(index2).setCellValue("是");
+//            else
+//                row.createCell(index2).setCellValue("否");
+//        }
+//        String path = Constant.storePath + "/download/学生名单.xlsx";
+//        FileOutputStream fos = new FileOutputStream(path);
+//        workbook.write(fos);
+//        fos.close();
+//    }
 }
