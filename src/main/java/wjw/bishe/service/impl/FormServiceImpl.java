@@ -36,7 +36,7 @@ public class FormServiceImpl implements FormService {
             internship.setExamineContent3("");
             internship.setExamineStatus3(Constant.examine_unknown);
         }
-        formDao.createInternship(internship, new Date());
+        formDao.createInternship(internship);
     }
 
     @Override
@@ -46,7 +46,7 @@ public class FormServiceImpl implements FormService {
 
     @Override
     public void createJob(Job job) {
-        this.formDao.createJob(job, new Date());
+        this.formDao.createJob(job);
     }
 
     @Override
@@ -56,7 +56,7 @@ public class FormServiceImpl implements FormService {
 
     @Override
     public void createGraduation(Graduation graduation) {
-        this.formDao.createGraduation(graduation, new Date());
+        this.formDao.createGraduation(graduation);
     }
 
     @Override

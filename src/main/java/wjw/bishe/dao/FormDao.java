@@ -12,15 +12,15 @@ import java.util.List;
 @Mapper
 @Repository
 public interface FormDao {
-    void createInternship(Internship internship, Date timestamp);
+    void createInternship(Internship internship);
 
     Internship getInternship(String uid);
 
-    void createJob(Job job, Date timestamp);
+    void createJob(Job job);
 
     Job getJob(String uid);
 
-    void createGraduation(Graduation graduation, Date timestamp);
+    void createGraduation(Graduation graduationp);
 
     Graduation getGraduation(String uid);
 
